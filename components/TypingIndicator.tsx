@@ -1,18 +1,6 @@
 export default function TypingIndicator() {
   return (
-    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px', marginBottom: '8px', padding: '0 4px' }}>
-      <div style={{
-        width: '28px', height: '28px', borderRadius: '50%', overflow: 'hidden',
-        flexShrink: 0, marginBottom: '2px', border: '1px solid #333', backgroundColor: '#2a2a2a',
-      }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/avatar.jpg"
-          alt=""
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
-          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-        />
-      </div>
+    <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '6px', paddingRight: '60px' }}>
       <div style={{
         backgroundColor: '#1e2124',
         borderRadius: '18px',

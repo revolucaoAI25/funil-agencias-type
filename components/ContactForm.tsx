@@ -47,7 +47,7 @@ export default function ContactForm({ onSubmit, disabled }: ContactFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ paddingLeft: '36px', paddingRight: '4px', marginBottom: '16px' }}>
+    <form onSubmit={handleSubmit} style={{ paddingRight: '60px', marginBottom: '16px' }}>
       <div style={{
         backgroundColor: '#1a1c1f',
         borderRadius: '16px',

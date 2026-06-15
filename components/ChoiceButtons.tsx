@@ -40,7 +40,7 @@ function ChoiceButton({ label, onSelect, disabled }: { label: string; onSelect: 
 
 export default function ChoiceButtons({ options, onSelect, disabled }: ChoiceButtonsProps) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '6px', marginBottom: '16px', paddingLeft: '36px', paddingRight: '4px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '6px', marginBottom: '16px', paddingRight: '60px' }}>
       {options.map((option) => (
         <ChoiceButton key={option} label={option} onSelect={() => onSelect(option)} disabled={disabled} />
       ))}

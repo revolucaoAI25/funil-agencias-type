@@ -77,15 +77,13 @@ export default function Home() {
   const showBotMessages = useCallback(
     async (msgs: string[], firstInstant = false) => {
       for (let i = 0; i < msgs.length; i++) {
-        if (i === 0 && firstInstant) {
-          addBotMessage(msgs[i]);
-        } else {
-          setShowTyping(true);
-          await delay(1500);
-          setShowTyping(false);
-          addBotMessage(msgs[i]);
-          await delay(80);
-        }
+        setShowTyping(true);
+        // First message of entire funnel: 800ms; all others: 1500ms
+        const typingTime = (i === 0 && firstInstant) ? 800 : 1500;
+        await delay(typingTime);
+        setShowTyping(false);
+        addBotMessage(msgs[i]);
+        await delay(80);
       }
     },
     [addBotMessage]
@@ -436,7 +434,7 @@ export default function Home() {
       <ChatHeader />
 
       {/* Messages */}
-      <div style={{ flex: 1, overflowY: 'auto', width: '100%', maxWidth: '520px', margin: '0 auto', padding: '16px 12px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', width: '100%', padding: '16px 20px' }}>
         {messages.map((msg) => (
           <ChatBubble key={msg.id} message={msg.text} isUser={msg.isUser} />
         ))}
@@ -452,7 +450,7 @@ export default function Home() {
         )}
 
         {!showTyping && inputMode === 'calendly_btn' && (
-          <div style={{ paddingLeft: '36px', marginBottom: '16px' }}>
+          <div style={{ marginBottom: '16px' }}>
             <button onClick={handleCalendlyClick} style={greenBtnStyle}>
               Agendar reunião com Lucas
             </button>
@@ -460,7 +458,7 @@ export default function Home() {
         )}
 
         {!showTyping && inputMode === 'curso_btn' && (
-          <div style={{ paddingLeft: '36px', marginBottom: '16px' }}>
+          <div style={{ marginBottom: '16px' }}>
             <button
               onClick={() => {
                 if (cursoUrl) window.location.href = cursoUrl;
@@ -478,7 +476,7 @@ export default function Home() {
 
       {/* Text input bar */}
       {inputMode === 'text' && (
-        <div style={{ width: '100%', maxWidth: '520px', margin: '0 auto', padding: '8px 12px 16px' }}>
+        <div style={{ width: '100%', padding: '8px 20px 16px' }}>
           <form
             onSubmit={handleTextSubmit}
             style={{
