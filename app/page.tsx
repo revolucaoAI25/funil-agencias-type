@@ -75,15 +75,17 @@ export default function Home() {
   const delay = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
   const showBotMessages = useCallback(
-    async (msgs: string[], firstInstant = false) => {
+    async (msgs: string[], firstInstant = false, extraDelayAfterLast = 0) => {
       for (let i = 0; i < msgs.length; i++) {
         setShowTyping(true);
-        // First message of entire funnel: 800ms; all others: 1500ms
         const typingTime = (i === 0 && firstInstant) ? 800 : 1500;
         await delay(typingTime);
         setShowTyping(false);
         addBotMessage(msgs[i]);
         await delay(80);
+      }
+      if (extraDelayAfterLast > 0) {
+        await delay(extraDelayAfterLast);
       }
     },
     [addBotMessage]
@@ -142,7 +144,7 @@ export default function Home() {
         'Já sei vender, mas preciso aprender a entregar IA': [
           `Boa, **${nome}**.`,
           'Nesse caso, o principal ponto é **ter uma entrega validada** para colocar no mercado com segurança.',
-          'A Revolução AI já realizou **mais de 100 implementações reais** e desenvolveu uma metodologia para construir agentes de IA com padrão, velocidade e qualidade.\n\nNa reunião, eu vou entender seu cenário e mostrar como essa entrega pode virar uma **oferta high ticket** para empresas.',
+          'A Revolução AI desenvolveu uma metodologia para construir agentes de IA com padrão, velocidade e qualidade — e já aplicou isso em projetos reais nos mais variados segmentos.\n\nNa reunião, eu vou entender seu cenário e mostrar como essa entrega pode virar uma **oferta high ticket** para empresas.',
         ],
         'Quero aprender venda e entrega do zero': [
           `Perfeito, **${nome}**.`,
@@ -152,7 +154,7 @@ export default function Home() {
         'Já tenho operação de IA e quero escalar': [
           `Boa, **${nome}**.`,
           'Nesse caso, a reunião precisa olhar para os **gargalos de escala**.',
-          'Pode ser:\n\n• **Aquisição** — geração de oportunidades\n• **Conversão** — taxa de fechamento\n• **Ticket** — valor por cliente\n• **Entrega** — padrão e velocidade\n• **Operação** — padronização e replicabilidade\n\nA Revolução AI cresceu exatamente por resolver esses pontos em mais de **100 operações reais**.',
+          'Pode ser:\n\n• **Aquisição** — geração de oportunidades\n• **Conversão** — taxa de fechamento\n• **Ticket** — valor por cliente\n• **Entrega** — padrão e velocidade\n• **Operação** — padronização e replicabilidade\n\nNa reunião, eu vou identificar onde está o seu gargalo principal e o que fazer para destravar o crescimento.',
         ],
         'Tenho agência de marketing/tráfego e quero entrar em IA': [
           `Boa, **${nome}**.`,
@@ -193,7 +195,7 @@ export default function Home() {
     await showBotMessages([
       `Perfeito, **${nome}**.`,
       'Eu sou fundador da **Revolução AI**, uma das primeiras agências de IA do Brasil.',
-      'Desde 2023, a Revolução AI atua com IA aplicada a negócios e já realizou **mais de 100 implementações reais** em nichos como advocacia, saúde, estética, software, franquias, varejo e infoprodutos.',
+      'Desde 2023, a Revolução AI estruturou projetos de IA aplicada a negócios em nichos como advocacia, saúde, estética, software, franquias, varejo e infoprodutos.',
       'Agora vamos entender seu momento para ver se faz sentido você conversar direto comigo.',
       'Qual opção mais combina com você hoje?',
     ]);
@@ -246,10 +248,10 @@ export default function Home() {
 
     await showBotMessages([
       'Entendido.',
-      'A metodologia da Revolução AI já foi aplicada em **mais de 100 operações reais**, passando por empresas, franquias, softwares, escritórios, clínicas, restaurantes, infoprodutores e influenciadores com grandes audiências.',
-      'Alguns clientes e operações que já passaram pela Revolução AI:\n\n• **Bubble Box** — franqueadora com mais de 250 unidades no Brasil\n• **Casoca** — plataforma para arquitetos e designers com mais de 300 mil profissionais cadastrados\n• **Patrícia Davidson** — nutricionista influencer com mais de 3 milhões de seguidores\n• **Dra. Ryuza Gonçalves** — influencer de suplementação com mais de 700 mil seguidores\n• **Tami Gerhardt** — influenciadora de emagrecimento com mais de 450 mil seguidores\n• **Willian Celso / Autêntica** — referência em posicionamento de marca, com mais de 400 mil seguidores\n• **Marcondes Madureira Advogados** — escritório de Direito de Família com forte presença digital e mais de 380 mil seguidores\n• **Guilherme Vazan** — infoprodutor de impressão 3D com mais de 5 mil alunos\n• **Guedes & Cruz Advogados** — escritório de advocacia bancária com alto volume de leads\n• **Kanpai BH** — restaurante japonês premium em Belo Horizonte',
+      'A Revolução AI já trabalhou com empresas, franquias, softwares, escritórios, clínicas, restaurantes, infoprodutores e influenciadores com grandes audiências.',
+      'Alguns clientes que já passaram pela Revolução AI:\n\n• **Bubble Box** — franqueadora com mais de 250 unidades no Brasil\n• **Casoca** — plataforma para arquitetos e designers com mais de 300 mil profissionais cadastrados\n• **Patrícia Davidson** — nutricionista influencer com mais de 3 milhões de seguidores\n• **Dra. Ryuza Gonçalves** — influencer de suplementação com mais de 700 mil seguidores\n• **Tami Gerhardt** — influenciadora de emagrecimento com mais de 450 mil seguidores\n• **Willian Celso / Autêntica** — referência em posicionamento de marca, com mais de 400 mil seguidores\n• **Marcondes Madureira Advogados** — escritório de Direito de Família com forte presença digital e mais de 380 mil seguidores\n• **Guilherme Vazan** — infoprodutor de impressão 3D com mais de 5 mil alunos\n• **Guedes & Cruz Advogados** — escritório de advocacia bancária com alto volume de leads\n• **Kanpai BH** — restaurante japonês premium em Belo Horizonte',
       'Agora precisamos entender o **principal ponto** que está impedindo você de avançar mais rápido.',
-    ]);
+    ], false, 1000);
 
     await showBotMessages(['Hoje, o que você mais precisa para crescer com IA?']);
     setChoiceOptions([
@@ -269,9 +271,7 @@ export default function Home() {
 
     await showBotMessages([
       'Esse é exatamente o tipo de ponto que eu analiso na reunião.',
-      'Na Revolução AI, o crescimento veio de uma metodologia baseada em **aquisição, venda e entrega**.',
-      'Esse método já foi aplicado em projetos reais para **aumentar conversas, reuniões e agendamentos** mantendo o mesmo investimento em tráfego.',
-      'Alguns resultados reais:\n\n• **Pita Advocacia** — de 10 para ~50 reuniões/mês\n• **Bubble Box** — de 40 para 180 reuniões/mês\n• **Dr. Paulo Bernardo** — de 5 para 30 consultas/mês',
+      'Na call, eu vou entender seu cenário e te mostrar o caminho mais direto para avançar nisso.',
       'Agora vamos entender sua meta.',
     ]);
 
