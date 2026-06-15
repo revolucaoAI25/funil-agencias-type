@@ -2,26 +2,47 @@
 
 export default function ChatHeader() {
   return (
-    <div className="bg-[#1a1a1a] border-b border-[#2d2d2d] px-4 py-3 flex items-center gap-3 sticky top-0 z-10 shadow-lg">
-      <div className="relative flex-shrink-0">
-        <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-[#25D366] shadow-md shadow-[#25D36633]">
+    <div style={{
+      backgroundColor: '#111111',
+      borderBottom: '1px solid #222',
+      padding: '12px 16px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px',
+      position: 'sticky',
+      top: 0,
+      zIndex: 10,
+      boxShadow: '0 2px 12px rgba(0,0,0,0.4)',
+    }}>
+      <div style={{ position: 'relative', flexShrink: 0 }}>
+        <div style={{
+          width: '44px', height: '44px', borderRadius: '50%', overflow: 'hidden',
+          border: '2px solid #25D366', boxShadow: '0 0 10px rgba(37,211,102,0.3)',
+        }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/avatar.jpg"
             alt="Lucas Magalhães"
-            className="w-full h-full object-cover object-top"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
             onError={(e) => {
+              (e.target as HTMLImageElement).parentElement!.style.backgroundColor = '#2a2a2a';
               (e.target as HTMLImageElement).style.display = 'none';
             }}
           />
         </div>
-        <div className="absolute bottom-0 right-0 w-3 h-3 bg-[#25D366] rounded-full border-2 border-[#1a1a1a]" />
+        <div style={{
+          position: 'absolute', bottom: '1px', right: '1px',
+          width: '11px', height: '11px', backgroundColor: '#25D366',
+          borderRadius: '50%', border: '2px solid #111111',
+        }} />
       </div>
-      <div className="flex-1">
-        <div className="text-white font-semibold text-sm leading-tight">@lucasmag.ai</div>
-        <div className="flex items-center gap-1 mt-0.5">
-          <div className="w-1.5 h-1.5 bg-[#25D366] rounded-full" />
-          <span className="text-[#25D366] text-xs font-medium">Online</span>
+      <div>
+        <div style={{ color: '#ffffff', fontWeight: 600, fontSize: '14px', lineHeight: 1.2 }}>
+          @lucasmag.ai
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '3px' }}>
+          <div style={{ width: '6px', height: '6px', backgroundColor: '#25D366', borderRadius: '50%' }} />
+          <span style={{ color: '#25D366', fontSize: '11px', fontWeight: 500 }}>Online</span>
         </div>
       </div>
     </div>

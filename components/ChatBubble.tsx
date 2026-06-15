@@ -3,40 +3,65 @@ interface ChatBubbleProps {
   isUser?: boolean;
 }
 
+const botBubbleStyle: React.CSSProperties = {
+  backgroundColor: '#1e2124',
+  color: '#e8e8e8',
+  borderRadius: '18px',
+  borderTopLeftRadius: '4px',
+  padding: '10px 14px',
+  maxWidth: '78%',
+  fontSize: '14px',
+  lineHeight: '1.55',
+  whiteSpace: 'pre-wrap',
+  wordBreak: 'break-word',
+  boxShadow: '0 1px 2px rgba(0,0,0,0.3)',
+};
+
+const userBubbleStyle: React.CSSProperties = {
+  backgroundColor: '#25D366',
+  color: '#ffffff',
+  borderRadius: '18px',
+  borderTopRightRadius: '4px',
+  padding: '10px 14px',
+  maxWidth: '78%',
+  fontSize: '14px',
+  lineHeight: '1.55',
+  wordBreak: 'break-word',
+  boxShadow: '0 1px 2px rgba(0,0,0,0.3)',
+};
+
+const avatarStyle: React.CSSProperties = {
+  width: '28px',
+  height: '28px',
+  borderRadius: '50%',
+  overflow: 'hidden',
+  flexShrink: 0,
+  marginBottom: '2px',
+  border: '1px solid #333',
+  backgroundColor: '#2a2a2a',
+};
+
 export default function ChatBubble({ message, isUser = false }: ChatBubbleProps) {
   if (isUser) {
     return (
-      <div className="flex justify-end mb-2 px-1">
-        <div
-          className="bg-[#25D366] text-white rounded-2xl rounded-tr-sm px-4 py-2.5 max-w-[78%] text-sm leading-relaxed shadow-sm"
-          style={{ wordBreak: 'break-word' }}
-        >
-          {message}
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '8px', padding: '0 4px' }}>
+        <div style={userBubbleStyle}>{message}</div>
       </div>
     );
   }
 
   return (
-    <div className="flex items-end gap-2 mb-2 px-1">
-      <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0 mb-0.5 border border-[#333]">
+    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px', marginBottom: '8px', padding: '0 4px' }}>
+      <div style={avatarStyle}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/avatar.jpg"
           alt=""
-          className="w-full h-full object-cover object-top"
-          onError={(e) => {
-            (e.target as HTMLImageElement).parentElement!.style.background = '#2a2a2a';
-            (e.target as HTMLImageElement).style.display = 'none';
-          }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
         />
       </div>
-      <div
-        className="bg-[#1e2124] text-[#e8e8e8] rounded-2xl rounded-bl-sm px-4 py-2.5 max-w-[78%] text-sm leading-relaxed shadow-sm whitespace-pre-wrap"
-        style={{ wordBreak: 'break-word' }}
-      >
-        {message}
-      </div>
+      <div style={botBubbleStyle}>{message}</div>
     </div>
   );
 }

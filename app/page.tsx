@@ -24,9 +24,10 @@ export default function Home() {
   const [showTyping, setShowTyping] = useState(false);
   const [inputMode, setInputMode] = useState<InputMode>(null);
   const [choiceOptions, setChoiceOptions] = useState<string[]>([]);
-  const [inputDisabled, setInputDisabled] = useState(false);
+  const [inputDisabled] = useState(false);
   const [showCalendly, setShowCalendly] = useState(false);
   const [textInput, setTextInput] = useState('');
+  const [textFocused, setTextFocused] = useState(false);
 
   const leadId = useRef<string | null>(null);
   const leadData = useRef({
@@ -179,16 +180,12 @@ export default function Home() {
     if (isRunning.current) return;
     isRunning.current = true;
 
-    // ── BLOCO 1 ────────────────────────────────────────────────────────────
-    await showBotMessages(
-      [
-        'Quer faturar R$50 mil por mês com uma agência de IA em até 6 meses?',
-        'Responda algumas perguntas rápidas e veja se faz sentido agendar uma reunião comigo, Lucas Magalhães, fundador da Revolução AI.',
-        'Na call, eu vou analisar seu cenário e te mostrar um plano para vender e entregar agentes de IA high ticket para empresas usando a metodologia de uma das primeiras agências de IA do Brasil.',
-        'Antes de começar, qual é seu nome?',
-      ],
-      true
-    );
+    await showBotMessages([
+      'Quer faturar R$50 mil por mês com uma agência de IA em até 6 meses?',
+      'Responda algumas perguntas rápidas e veja se faz sentido agendar uma reunião comigo, Lucas Magalhães, fundador da Revolução AI.',
+      'Na call, eu vou analisar seu cenário e te mostrar um plano para vender e entregar agentes de IA high ticket para empresas usando a metodologia de uma das primeiras agências de IA do Brasil.',
+      'Antes de começar, qual é seu nome?',
+    ], true);
     setInputMode('text');
 
     const nome = await new Promise<string>((resolve) => {
@@ -199,7 +196,6 @@ export default function Home() {
     leadData.current.nome = nome;
     await createLead();
 
-    // ── BLOCO 2 ────────────────────────────────────────────────────────────
     await showBotMessages([
       `Perfeito, ${nome}.`,
       'Eu sou fundador da Revolução AI, uma das primeiras agências de IA do Brasil.',
@@ -222,10 +218,8 @@ export default function Home() {
     await updateLead({ perfil });
     leadData.current.perfil = perfil;
 
-    // ── BLOCO 3 — Ramificação ──────────────────────────────────────────────
     await runBranchMessages(nome, perfil);
 
-    // ── BLOCO 4 ────────────────────────────────────────────────────────────
     await showBotMessages(['Como está sua operação hoje?']);
     setChoiceOptions([
       'Ainda estou começando',
@@ -241,7 +235,6 @@ export default function Home() {
     addUserMessage(momento);
     await updateLead({ momento_operacao: momento });
 
-    // ── BLOCO 5 ────────────────────────────────────────────────────────────
     await showBotMessages(['Quanto você fatura hoje por mês com IA, automação, tráfego ou serviços digitais?']);
     setChoiceOptions([
       'Ainda não faturo',
@@ -257,7 +250,6 @@ export default function Home() {
     addUserMessage(faturamento);
     await updateLead({ faturamento_atual: faturamento });
 
-    // ── BLOCO 6 — Prova social ─────────────────────────────────────────────
     await showBotMessages([
       'Entendido.',
       'A metodologia da Revolução AI já foi aplicada em mais de 100 operações reais, passando por empresas, franquias, softwares, escritórios, clínicas, restaurantes, infoprodutores e influenciadores com grandes audiências.',
@@ -265,7 +257,6 @@ export default function Home() {
       'Agora precisamos entender o principal ponto que está impedindo você de avançar mais rápido.',
     ]);
 
-    // ── BLOCO 7 ────────────────────────────────────────────────────────────
     await showBotMessages(['Hoje, o que você mais precisa para crescer com IA?']);
     setChoiceOptions([
       'Aprender a construir agentes de IA',
@@ -282,7 +273,6 @@ export default function Home() {
     addUserMessage(necessidade);
     await updateLead({ principal_necessidade: necessidade });
 
-    // ── BLOCO 8 — Cases ────────────────────────────────────────────────────
     await showBotMessages([
       'Esse é exatamente o tipo de ponto que eu analiso na reunião.',
       'Na Revolução AI, o crescimento veio de uma metodologia baseada em aquisição, venda e entrega.',
@@ -291,7 +281,6 @@ export default function Home() {
       'Agora vamos entender sua meta.',
     ]);
 
-    // ── BLOCO 9 ────────────────────────────────────────────────────────────
     await showBotMessages(['Qual faturamento mensal você quer atingir com sua agência de IA nos próximos 6 meses?']);
     setChoiceOptions([
       'Fazer as primeiras vendas',
@@ -307,7 +296,6 @@ export default function Home() {
     addUserMessage(objetivo);
     await updateLead({ objetivo_faturamento: objetivo });
 
-    // ── BLOCO 10 ───────────────────────────────────────────────────────────
     await showBotMessages([
       'Para acelerar esse plano, quanto você estaria disposto a investir em uma mentoria com acompanhamento direto, método comercial, método de entrega, scripts, templates e direcionamento?',
     ]);
@@ -332,7 +320,6 @@ export default function Home() {
     leadData.current.investimento = investimento;
     leadData.current.status_lead = status;
 
-    // ── BLOCO 11B — Curso ──────────────────────────────────────────────────
     if (status === 'curso_197') {
       await showBotMessages([
         `Entendi, ${nome}.`,
@@ -344,7 +331,6 @@ export default function Home() {
       return;
     }
 
-    // ── BLOCO 11A — Captura ────────────────────────────────────────────────
     await showBotMessages([
       `Perfeito, ${nome}.`,
       'Pelo que você respondeu, faz sentido você avançar para uma reunião comigo.',
@@ -363,7 +349,6 @@ export default function Home() {
     addUserMessage(`WhatsApp: ${contacts.whatsapp}`);
     await updateLead({ whatsapp: contacts.whatsapp, instagram: contacts.instagram, email: contacts.email });
 
-    // ── BLOCO 12A — Agendamento ────────────────────────────────────────────
     await showBotMessages([
       `Tudo certo, ${nome}.`,
       'Agora escolha o melhor horário para sua reunião comigo.',
@@ -378,11 +363,9 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ─── HANDLERS ─────────────────────────────────────────────────────────────
-
   const handleTextSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!textInput.trim() || inputDisabled) return;
+    if (!textInput.trim()) return;
     const value = textInput.trim();
     setTextInput('');
     setInputMode(null);
@@ -395,7 +378,6 @@ export default function Home() {
   };
 
   const handleChoice = useCallback((option: string) => {
-    if (inputDisabled) return;
     setInputMode(null);
     const w = window as Window & { __funnelResolveChoice?: (v: string) => void };
     if (w.__funnelResolveChoice) {
@@ -403,7 +385,7 @@ export default function Home() {
       delete w.__funnelResolveChoice;
       resolve(option);
     }
-  }, [inputDisabled]);
+  }, []);
 
   const handleContactsSubmit = useCallback((data: { whatsapp: string; instagram: string; email: string }) => {
     setInputMode(null);
@@ -423,8 +405,8 @@ export default function Home() {
     setShowCalendly(true);
   }, [updateLead]);
 
-  const handleCalendlyScheduled = useCallback(async () => {
-    await updateLead({ agendou_reuniao: true });
+  const afterCalendly = useCallback(async (scheduled: boolean) => {
+    if (scheduled) await updateLead({ agendou_reuniao: true });
     setShowCalendly(false);
     setInputMode(null);
     await showBotMessages([
@@ -434,72 +416,57 @@ export default function Home() {
     ]);
   }, [updateLead, showBotMessages]);
 
-  const handleCalendlyClose = useCallback(async () => {
-    setShowCalendly(false);
-    setInputMode(null);
-    await showBotMessages([
-      'Reunião agendada. ✓',
-      'No horário escolhido, esteja em um local tranquilo para conversar comigo.',
-      'Eu vou analisar seu cenário e te mostrar um plano para construir ou escalar sua agência de IA com base na metodologia que a Revolução AI usa em projetos reais.',
-    ]);
-  }, [showBotMessages]);
-
   const cursoUrl = process.env.NEXT_PUBLIC_CURSO_197_URL;
 
+  const greenBtnStyle: React.CSSProperties = {
+    backgroundColor: '#25D366',
+    color: '#ffffff',
+    fontWeight: 600,
+    borderRadius: '12px',
+    padding: '12px 24px',
+    fontSize: '14px',
+    cursor: 'pointer',
+    border: 'none',
+    boxShadow: '0 4px 14px rgba(37,211,102,0.25)',
+    transition: 'all 0.15s ease',
+  };
+
   return (
-    <div className="flex flex-col h-screen bg-[#0d0d0d]">
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', backgroundColor: '#0d0d0d' }}>
       <ChatHeader />
 
-      {/* Chat area */}
-      <div className="flex-1 overflow-y-auto w-full max-w-lg mx-auto px-3 py-5">
+      {/* Messages */}
+      <div style={{ flex: 1, overflowY: 'auto', width: '100%', maxWidth: '520px', margin: '0 auto', padding: '16px 12px' }}>
         {messages.map((msg) => (
           <ChatBubble key={msg.id} message={msg.text} isUser={msg.isUser} />
         ))}
 
         {showTyping && <TypingIndicator />}
 
-        {/* Choice buttons */}
         {!showTyping && inputMode === 'choice' && (
           <ChoiceButtons options={choiceOptions} onSelect={handleChoice} disabled={inputDisabled} />
         )}
 
-        {/* Contact form */}
         {!showTyping && inputMode === 'contacts' && (
           <ContactForm onSubmit={handleContactsSubmit} disabled={inputDisabled} />
         )}
 
-        {/* Calendly button */}
         {!showTyping && inputMode === 'calendly_btn' && (
-          <div className="pl-9 mb-4">
-            <button
-              onClick={handleCalendlyClick}
-              className="
-                bg-[#25D366] text-white font-semibold rounded-xl px-6 py-3 text-sm
-                hover:bg-[#20bf5a] hover:shadow-lg hover:shadow-[#25D36633]
-                active:scale-[0.98] transition-all duration-150
-              "
-            >
+          <div style={{ paddingLeft: '36px', marginBottom: '16px' }}>
+            <button onClick={handleCalendlyClick} style={greenBtnStyle}>
               Agendar reunião com Lucas
             </button>
           </div>
         )}
 
-        {/* Curso button */}
         {!showTyping && inputMode === 'curso_btn' && (
-          <div className="pl-9 mb-4">
+          <div style={{ paddingLeft: '36px', marginBottom: '16px' }}>
             <button
               onClick={() => {
-                if (cursoUrl) {
-                  window.location.href = cursoUrl;
-                } else {
-                  alert('Link do treinamento ainda não configurado.');
-                }
+                if (cursoUrl) window.location.href = cursoUrl;
+                else alert('Link do treinamento ainda não configurado.');
               }}
-              className="
-                bg-[#25D366] text-white font-semibold rounded-xl px-6 py-3 text-sm
-                hover:bg-[#20bf5a] hover:shadow-lg hover:shadow-[#25D36633]
-                active:scale-[0.98] transition-all duration-150
-              "
+              style={greenBtnStyle}
             >
               Conhecer o treinamento de entrada
             </button>
@@ -511,28 +478,51 @@ export default function Home() {
 
       {/* Text input bar */}
       {inputMode === 'text' && (
-        <div className="w-full max-w-lg mx-auto px-3 pb-4 pt-2">
+        <div style={{ width: '100%', maxWidth: '520px', margin: '0 auto', padding: '8px 12px 16px' }}>
           <form
             onSubmit={handleTextSubmit}
-            className="flex gap-2 bg-[#1a1a1a] rounded-2xl border border-[#2d2d2d] p-2 shadow-lg"
+            style={{
+              display: 'flex',
+              gap: '8px',
+              backgroundColor: '#1a1c1f',
+              borderRadius: '16px',
+              border: `1.5px solid ${textFocused ? '#25D366' : '#2a2a2a'}`,
+              padding: '6px 6px 6px 14px',
+              transition: 'border-color 0.2s ease',
+            }}
           >
             <input
               type="text"
               value={textInput}
               onChange={(e) => setTextInput(e.target.value)}
+              onFocus={() => setTextFocused(true)}
+              onBlur={() => setTextFocused(false)}
               placeholder="Seu nome..."
               autoFocus
-              disabled={inputDisabled}
-              className="flex-1 bg-transparent text-white placeholder-[#555] px-2 py-1.5 text-sm outline-none"
+              style={{
+                flex: 1,
+                backgroundColor: 'transparent',
+                color: '#ffffff',
+                fontSize: '14px',
+                outline: 'none',
+                border: 'none',
+              }}
             />
             <button
               type="submit"
-              disabled={inputDisabled || !textInput.trim()}
-              className="
-                bg-[#25D366] text-white rounded-xl px-4 py-2 text-sm font-semibold
-                hover:bg-[#20bf5a] transition-colors
-                disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0
-              "
+              disabled={!textInput.trim()}
+              style={{
+                backgroundColor: textInput.trim() ? '#25D366' : '#1a5c38',
+                color: '#ffffff',
+                borderRadius: '12px',
+                padding: '8px 16px',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: textInput.trim() ? 'pointer' : 'not-allowed',
+                border: 'none',
+                flexShrink: 0,
+                transition: 'background-color 0.15s ease',
+              }}
             >
               Enviar
             </button>
@@ -542,8 +532,8 @@ export default function Home() {
 
       {showCalendly && (
         <CalendlyModal
-          onClose={handleCalendlyClose}
-          onScheduled={handleCalendlyScheduled}
+          onClose={() => afterCalendly(false)}
+          onScheduled={() => afterCalendly(true)}
         />
       )}
     </div>
