@@ -135,36 +135,32 @@ export default function Home() {
     async (nome: string, perfil: string) => {
       const branches: Record<string, string[]> = {
         'Já sei implementar IA, mas preciso vender mais': [
-          `Boa, ${nome}.`,
-          'Nesse caso, o principal ponto é transformar sua capacidade técnica em uma oferta vendável, com aquisição, posicionamento, qualificação, reunião comercial, proposta e fechamento high ticket.',
-          'Na Revolução AI, eu estruturei esse processo dentro da própria agência para vender agentes de IA para empresas com previsibilidade e percepção de valor alta.',
+          `Boa, **${nome}**.`,
+          'Nesse caso, o principal ponto é **transformar sua capacidade técnica em uma oferta vendável** — com aquisição, posicionamento, qualificação, reunião comercial, proposta e fechamento high ticket.',
+          'Na Revolução AI, eu estruturei esse processo dentro da própria agência para **vender agentes de IA para empresas** com previsibilidade e percepção de valor alta.',
         ],
         'Já sei vender, mas preciso aprender a entregar IA': [
-          `Boa, ${nome}.`,
-          'Nesse caso, o principal ponto é ter uma entrega validada para colocar no mercado com segurança.',
-          'A Revolução AI já realizou mais de 100 implementações reais e desenvolveu uma metodologia para construir agentes de IA com padrão, velocidade e qualidade.',
-          'Na reunião, eu vou entender seu cenário e mostrar como essa entrega pode virar uma oferta high ticket para empresas.',
+          `Boa, **${nome}**.`,
+          'Nesse caso, o principal ponto é **ter uma entrega validada** para colocar no mercado com segurança.',
+          'A Revolução AI já realizou **mais de 100 implementações reais** e desenvolveu uma metodologia para construir agentes de IA com padrão, velocidade e qualidade.\n\nNa reunião, eu vou entender seu cenário e mostrar como essa entrega pode virar uma **oferta high ticket** para empresas.',
         ],
         'Quero aprender venda e entrega do zero': [
-          `Perfeito, ${nome}.`,
-          'Nesse caso, o caminho precisa ser completo.',
-          'Você precisa entender qual oferta vender, como gerar oportunidades, como conduzir vendas, como construir os agentes e como organizar a entrega.',
-          'É exatamente esse processo que a Revolução AI estruturou: oferta, aquisição, vendas, entrega e operação.',
+          `Perfeito, **${nome}**.`,
+          'Nesse caso, o caminho precisa ser **completo**.',
+          'Você precisa estruturar:\n\n• **Qual oferta vender**\n• **Como gerar oportunidades**\n• **Como conduzir vendas**\n• **Como construir os agentes**\n• **Como organizar a entrega**\n\nÉ exatamente esse processo que a Revolução AI estruturou.',
         ],
         'Já tenho operação de IA e quero escalar': [
-          `Boa, ${nome}.`,
-          'Nesse caso, a reunião precisa olhar para os gargalos de escala.',
-          'Pode ser aquisição, conversão, ticket, entrega, operação ou padronização.',
-          'A Revolução AI cresceu porque transformou a entrega de agentes de IA em uma metodologia comercial e operacional replicável, aplicada em mais de 100 operações reais.',
+          `Boa, **${nome}**.`,
+          'Nesse caso, a reunião precisa olhar para os **gargalos de escala**.',
+          'Pode ser:\n\n• **Aquisição** — geração de oportunidades\n• **Conversão** — taxa de fechamento\n• **Ticket** — valor por cliente\n• **Entrega** — padrão e velocidade\n• **Operação** — padronização e replicabilidade\n\nA Revolução AI cresceu exatamente por resolver esses pontos em mais de **100 operações reais**.',
         ],
         'Tenho agência de marketing/tráfego e quero entrar em IA': [
-          `Boa, ${nome}.`,
-          'Esse é um dos caminhos mais fortes.',
-          'Quem já entende de tráfego, geração de leads e venda de serviços pode usar agentes de IA como uma nova oferta high ticket para empresas que já recebem oportunidades, mas precisam converter mais.',
-          'Na reunião, eu vou te mostrar como essa solução pode entrar na sua operação com uma metodologia validada de venda e entrega.',
+          `Boa, **${nome}**.`,
+          'Esse é **um dos caminhos mais fortes**.',
+          'Quem já entende de tráfego, geração de leads e venda de serviços pode usar agentes de IA como uma **nova oferta high ticket** para empresas — aproveitando o que você já sabe fazer.\n\nNa reunião, eu vou te mostrar como essa solução entra na sua operação com uma metodologia validada de **venda e entrega**.',
         ],
       };
-      await showBotMessages(branches[perfil] || [`Boa, ${nome}.`]);
+      await showBotMessages(branches[perfil] || [`Boa, **${nome}**.`]);
     },
     [showBotMessages]
   );
@@ -179,9 +175,9 @@ export default function Home() {
     isRunning.current = true;
 
     await showBotMessages([
-      'Quer faturar R$50 mil por mês com uma agência de IA em até 6 meses?',
-      'Responda algumas perguntas rápidas e veja se faz sentido agendar uma reunião comigo, Lucas Magalhães, fundador da Revolução AI.',
-      'Na call, eu vou analisar seu cenário e te mostrar um plano para vender e entregar agentes de IA high ticket para empresas usando a metodologia de uma das primeiras agências de IA do Brasil.',
+      '**Quer faturar R$50 mil por mês com uma agência de IA em até 6 meses?**',
+      'Responda algumas perguntas rápidas e veja se faz sentido agendar uma reunião comigo, **Lucas Magalhães**, fundador da Revolução AI.',
+      'Na call, eu vou analisar seu cenário e te mostrar um plano para **vender e entregar agentes de IA high ticket** para empresas usando a metodologia de uma das primeiras agências de IA do Brasil.',
       'Antes de começar, qual é seu nome?',
     ], true);
     setInputMode('text');
@@ -195,9 +191,9 @@ export default function Home() {
     await createLead();
 
     await showBotMessages([
-      `Perfeito, ${nome}.`,
-      'Eu sou fundador da Revolução AI, uma das primeiras agências de IA do Brasil.',
-      'Desde 2023, a Revolução AI atua com IA aplicada a negócios e já realizou mais de 100 implementações reais em nichos como advocacia, saúde, estética, software, franquias, varejo e infoprodutos.',
+      `Perfeito, **${nome}**.`,
+      'Eu sou fundador da **Revolução AI**, uma das primeiras agências de IA do Brasil.',
+      'Desde 2023, a Revolução AI atua com IA aplicada a negócios e já realizou **mais de 100 implementações reais** em nichos como advocacia, saúde, estética, software, franquias, varejo e infoprodutos.',
       'Agora vamos entender seu momento para ver se faz sentido você conversar direto comigo.',
       'Qual opção mais combina com você hoje?',
     ]);
@@ -250,9 +246,9 @@ export default function Home() {
 
     await showBotMessages([
       'Entendido.',
-      'A metodologia da Revolução AI já foi aplicada em mais de 100 operações reais, passando por empresas, franquias, softwares, escritórios, clínicas, restaurantes, infoprodutores e influenciadores com grandes audiências.',
-      'Alguns clientes e operações que já passaram pela Revolução AI:\n\nBubble Box — franqueadora com mais de 250 unidades no Brasil. Casoca — plataforma para arquitetos e designers com mais de 300 mil profissionais cadastrados. Patrícia Davidson — nutricionista influencer com mais de 3 milhões de seguidores. Dra. Ryuza Gonçalves — influencer de suplementação com mais de 700 mil seguidores. Tami Gerhardt — influenciadora de emagrecimento com mais de 450 mil seguidores. Willian Celso / Autêntica — referência em posicionamento de marca, com mais de 400 mil seguidores. Marcondes Madureira Advogados — escritório de Direito de Família com forte presença digital e mais de 380 mil seguidores. Guilherme Vazan — infoprodutor de impressão 3D com mais de 5 mil alunos. Guedes & Cruz Advogados — escritório de advocacia bancária com alto volume de leads. Kanpai BH — restaurante japonês premium em Belo Horizonte.',
-      'Agora precisamos entender o principal ponto que está impedindo você de avançar mais rápido.',
+      'A metodologia da Revolução AI já foi aplicada em **mais de 100 operações reais**, passando por empresas, franquias, softwares, escritórios, clínicas, restaurantes, infoprodutores e influenciadores com grandes audiências.',
+      'Alguns clientes e operações que já passaram pela Revolução AI:\n\n• **Bubble Box** — franqueadora com mais de 250 unidades no Brasil\n• **Casoca** — plataforma para arquitetos e designers com mais de 300 mil profissionais cadastrados\n• **Patrícia Davidson** — nutricionista influencer com mais de 3 milhões de seguidores\n• **Dra. Ryuza Gonçalves** — influencer de suplementação com mais de 700 mil seguidores\n• **Tami Gerhardt** — influenciadora de emagrecimento com mais de 450 mil seguidores\n• **Willian Celso / Autêntica** — referência em posicionamento de marca, com mais de 400 mil seguidores\n• **Marcondes Madureira Advogados** — escritório de Direito de Família com forte presença digital e mais de 380 mil seguidores\n• **Guilherme Vazan** — infoprodutor de impressão 3D com mais de 5 mil alunos\n• **Guedes & Cruz Advogados** — escritório de advocacia bancária com alto volume de leads\n• **Kanpai BH** — restaurante japonês premium em Belo Horizonte',
+      'Agora precisamos entender o **principal ponto** que está impedindo você de avançar mais rápido.',
     ]);
 
     await showBotMessages(['Hoje, o que você mais precisa para crescer com IA?']);
@@ -273,9 +269,9 @@ export default function Home() {
 
     await showBotMessages([
       'Esse é exatamente o tipo de ponto que eu analiso na reunião.',
-      'Na Revolução AI, o crescimento veio de uma metodologia baseada em aquisição, venda e entrega.',
-      'Esse método já foi aplicado em projetos reais para aumentar conversas, reuniões e agendamentos mantendo o mesmo investimento em tráfego.',
-      'Alguns exemplos:\n\nPita Advocacia: de 10 para cerca de 50 reuniões/mês. Bubble Box: de 40 para 180 reuniões/mês. Dr. Paulo Bernardo: de 5 para 30 consultas/mês.',
+      'Na Revolução AI, o crescimento veio de uma metodologia baseada em **aquisição, venda e entrega**.',
+      'Esse método já foi aplicado em projetos reais para **aumentar conversas, reuniões e agendamentos** mantendo o mesmo investimento em tráfego.',
+      'Alguns resultados reais:\n\n• **Pita Advocacia** — de 10 para ~50 reuniões/mês\n• **Bubble Box** — de 40 para 180 reuniões/mês\n• **Dr. Paulo Bernardo** — de 5 para 30 consultas/mês',
       'Agora vamos entender sua meta.',
     ]);
 
@@ -320,9 +316,9 @@ export default function Home() {
 
     if (status === 'curso_197') {
       await showBotMessages([
-        `Entendi, ${nome}.`,
-        'Neste momento, o melhor próximo passo para você é começar por um treinamento mais simples e direto.',
-        'Vou te enviar uma opção de entrada para você começar a entender como funciona o mercado de agentes de IA e dar os primeiros passos.',
+        `Entendi, **${nome}**.`,
+        'Neste momento, o melhor próximo passo para você é começar por um **treinamento mais simples e direto**.',
+        'Vou te enviar uma opção de entrada para você começar a entender como funciona o **mercado de agentes de IA** e dar os primeiros passos.',
       ]);
       setInputMode('curso_btn');
       isRunning.current = false;
@@ -330,11 +326,10 @@ export default function Home() {
     }
 
     await showBotMessages([
-      `Perfeito, ${nome}.`,
-      'Pelo que você respondeu, faz sentido você avançar para uma reunião comigo.',
-      'Na call, eu vou analisar seu cenário e montar um plano para você estruturar sua agência de IA com base nos 5 pilares da metodologia da Revolução AI:',
-      'oferta, aquisição, vendas, entrega e operação.',
-      'A ideia é você sair da reunião com clareza sobre o caminho mais direto para vender e entregar agentes de IA high ticket para empresas.',
+      `Perfeito, **${nome}**.`,
+      'Pelo que você respondeu, faz sentido você avançar para uma **reunião comigo**.',
+      'Na call, eu vou analisar seu cenário e montar um plano com base nos **5 pilares da metodologia da Revolução AI**:\n\n• **Oferta** — o que vender e como posicionar\n• **Aquisição** — como gerar oportunidades\n• **Vendas** — como fechar contratos high ticket\n• **Entrega** — como construir e entregar os agentes\n• **Operação** — como escalar com padrão',
+      'A ideia é você sair da reunião com **clareza sobre o caminho mais direto** para vender e entregar agentes de IA high ticket para empresas.',
       'Antes de liberar a agenda, deixe seu contato para nossa equipe confirmar sua aplicação.',
     ]);
     setInputMode('contacts');
@@ -348,9 +343,9 @@ export default function Home() {
     await updateLead({ whatsapp: contacts.whatsapp, instagram: contacts.instagram, email: contacts.email });
 
     await showBotMessages([
-      `Tudo certo, ${nome}.`,
-      'Agora escolha o melhor horário para sua reunião comigo.',
-      'Nessa conversa, eu vou entender seu momento atual e montar um plano para você avançar rumo à sua meta com uma agência de IA.',
+      `Tudo certo, **${nome}**.`,
+      'Agora escolha o **melhor horário** para sua reunião comigo.',
+      'Nessa conversa, eu vou entender seu momento atual e montar um plano para você avançar rumo à sua meta com uma **agência de IA**.',
     ]);
     setInputMode('calendly_btn');
     isRunning.current = false;
