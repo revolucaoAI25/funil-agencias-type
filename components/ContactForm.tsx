@@ -15,9 +15,11 @@ export default function ContactForm({ onSubmit, disabled }: ContactFormProps) {
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!whatsapp.trim()) newErrors.whatsapp = 'WhatsApp é obrigatório';
-    else if (!/^\d{10,11}$/.test(whatsapp.replace(/\D/g, ''))) {
-      newErrors.whatsapp = 'Informe um número válido (10 ou 11 dígitos)';
+    const digits = whatsapp.replace(/\D/g, '');
+    if (!digits) {
+      newErrors.whatsapp = 'WhatsApp é obrigatório';
+    } else if (digits.length < 10 || digits.length > 11) {
+      newErrors.whatsapp = 'DDD + número (10 ou 11 dígitos)';
     }
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = 'E-mail inválido';
@@ -29,16 +31,17 @@ export default function ContactForm({ onSubmit, disabled }: ContactFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
+    const ig = instagram.trim();
     onSubmit({
       whatsapp: whatsapp.replace(/\D/g, ''),
-      instagram: instagram.startsWith('@') ? instagram : instagram ? `@${instagram}` : '',
-      email,
+      instagram: ig ? (ig.startsWith('@') ? ig : `@${ig}`) : '',
+      email: email.trim(),
     });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="pl-10 pr-2 mb-4">
-      <div className="bg-[#1e1e1e] rounded-2xl p-4 flex flex-col gap-3">
+    <form onSubmit={handleSubmit} className="pl-9 pr-1 mb-4">
+      <div className="bg-[#1e2124] rounded-2xl p-4 flex flex-col gap-3 border border-[#2d2d2d]">
         <div>
           <input
             type="tel"
@@ -46,9 +49,9 @@ export default function ContactForm({ onSubmit, disabled }: ContactFormProps) {
             value={whatsapp}
             onChange={(e) => setWhatsapp(e.target.value)}
             disabled={disabled}
-            className="w-full bg-[#2a2a2a] text-white placeholder-gray-500 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-1 focus:ring-[#25D366] disabled:opacity-50"
+            className="w-full bg-[#141618] text-white placeholder-[#555] rounded-xl px-4 py-3 text-sm outline-none focus:ring-1 focus:ring-[#25D366] border border-[#2d2d2d] transition-all disabled:opacity-50"
           />
-          {errors.whatsapp && <p className="text-red-400 text-xs mt-1">{errors.whatsapp}</p>}
+          {errors.whatsapp && <p className="text-red-400 text-xs mt-1.5 pl-1">{errors.whatsapp}</p>}
         </div>
         <input
           type="text"
@@ -56,7 +59,7 @@ export default function ContactForm({ onSubmit, disabled }: ContactFormProps) {
           value={instagram}
           onChange={(e) => setInstagram(e.target.value)}
           disabled={disabled}
-          className="w-full bg-[#2a2a2a] text-white placeholder-gray-500 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-1 focus:ring-[#25D366] disabled:opacity-50"
+          className="w-full bg-[#141618] text-white placeholder-[#555] rounded-xl px-4 py-3 text-sm outline-none focus:ring-1 focus:ring-[#25D366] border border-[#2d2d2d] transition-all disabled:opacity-50"
         />
         <div>
           <input
@@ -65,14 +68,19 @@ export default function ContactForm({ onSubmit, disabled }: ContactFormProps) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={disabled}
-            className="w-full bg-[#2a2a2a] text-white placeholder-gray-500 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-1 focus:ring-[#25D366] disabled:opacity-50"
+            className="w-full bg-[#141618] text-white placeholder-[#555] rounded-xl px-4 py-3 text-sm outline-none focus:ring-1 focus:ring-[#25D366] border border-[#2d2d2d] transition-all disabled:opacity-50"
           />
-          {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
+          {errors.email && <p className="text-red-400 text-xs mt-1.5 pl-1">{errors.email}</p>}
         </div>
         <button
           type="submit"
           disabled={disabled}
-          className="bg-[#25D366] text-white font-semibold rounded-xl px-4 py-2.5 text-sm hover:bg-[#1fad52] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="
+            bg-[#25D366] text-white font-semibold rounded-xl px-4 py-3 text-sm
+            hover:bg-[#20bf5a] hover:shadow-lg hover:shadow-[#25D36633]
+            active:scale-[0.98] transition-all duration-150
+            disabled:opacity-50 disabled:cursor-not-allowed
+          "
         >
           Liberar agenda
         </button>

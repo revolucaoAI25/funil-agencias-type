@@ -4,20 +4,15 @@ import { useEffect, useState, useCallback } from 'react';
 import { LeadData } from '@/types/lead';
 
 const KANBAN_COLUMNS = [
-  { id: 'novo', label: 'Novo Lead', color: '#6366f1' },
-  { id: 'baixo_investimento', label: 'Baixo Investimento', color: '#f59e0b' },
-  { id: 'qualificado', label: 'Qualificado', color: '#10b981' },
-  { id: 'clicou', label: 'Clicou Agendamento', color: '#3b82f6' },
-  { id: 'agendou', label: 'Reunião Agendada', color: '#25D366' },
-  { id: 'curso_197', label: 'Curso R$197', color: '#ef4444' },
+  { id: 'novo', label: 'Novo Lead', color: '#6366f1', bg: '#6366f115' },
+  { id: 'baixo_investimento', label: 'Baixo Investimento', color: '#f59e0b', bg: '#f59e0b15' },
+  { id: 'qualificado', label: 'Qualificado', color: '#10b981', bg: '#10b98115' },
+  { id: 'clicou', label: 'Clicou Agendamento', color: '#3b82f6', bg: '#3b82f615' },
+  { id: 'agendou', label: 'Reunião Agendada', color: '#25D366', bg: '#25D36615' },
+  { id: 'curso_197', label: 'Curso R$197', color: '#ef4444', bg: '#ef444415' },
 ];
 
-const STATUS_OPTIONS = [
-  'novo',
-  'baixo_investimento',
-  'qualificado',
-  'curso_197',
-];
+const STATUS_OPTIONS = ['novo', 'baixo_investimento', 'qualificado', 'curso_197'];
 
 function getColumnLeads(leads: LeadData[], columnId: string): LeadData[] {
   if (columnId === 'clicou') return leads.filter((l) => l.clicou_agendamento);
@@ -36,6 +31,20 @@ function formatDate(dateStr?: string) {
   });
 }
 
+function StatusBadge({ status }: { status: string }) {
+  const col = KANBAN_COLUMNS.find((c) => c.id === status);
+  const color = col?.color || '#888';
+  const bg = col?.bg || '#88888815';
+  return (
+    <span
+      className="text-xs font-medium px-2 py-0.5 rounded-full"
+      style={{ color, backgroundColor: bg, border: `1px solid ${color}33` }}
+    >
+      {status.replace(/_/g, ' ')}
+    </span>
+  );
+}
+
 interface LeadModalProps {
   lead: LeadData;
   onClose: () => void;
@@ -43,51 +52,59 @@ interface LeadModalProps {
 }
 
 function LeadModal({ lead, onClose, onStatusChange }: LeadModalProps) {
-  const fields: [string, string | boolean | undefined][] = [
-    ['Nome', lead.nome],
-    ['WhatsApp', lead.whatsapp],
-    ['Instagram', lead.instagram],
-    ['E-mail', lead.email],
-    ['Perfil', lead.perfil],
-    ['Momento', lead.momento_operacao],
-    ['Faturamento atual', lead.faturamento_atual],
-    ['Principal necessidade', lead.principal_necessidade],
-    ['Objetivo', lead.objetivo_faturamento],
-    ['Investimento', lead.investimento],
-    ['Status', lead.status_lead],
+  const rows: [string, string][] = [
+    ['Nome', lead.nome || ''],
+    ['WhatsApp', lead.whatsapp || ''],
+    ['Instagram', lead.instagram || ''],
+    ['E-mail', lead.email || ''],
+    ['Perfil', lead.perfil || ''],
+    ['Momento da operação', lead.momento_operacao || ''],
+    ['Faturamento atual', lead.faturamento_atual || ''],
+    ['Principal necessidade', lead.principal_necessidade || ''],
+    ['Objetivo de faturamento', lead.objetivo_faturamento || ''],
+    ['Investimento', lead.investimento || ''],
+    ['Status', lead.status_lead || ''],
     ['Clicou agendamento', lead.clicou_agendamento ? 'Sim' : 'Não'],
     ['Agendou reunião', lead.agendou_reuniao ? 'Sim' : 'Não'],
-    ['UTM Source', lead.utm_source],
-    ['UTM Medium', lead.utm_medium],
-    ['UTM Campaign', lead.utm_campaign],
-    ['UTM Content', lead.utm_content],
-    ['UTM Term', lead.utm_term],
+    ['UTM Source', lead.utm_source || ''],
+    ['UTM Medium', lead.utm_medium || ''],
+    ['UTM Campaign', lead.utm_campaign || ''],
+    ['UTM Content', lead.utm_content || ''],
+    ['UTM Term', lead.utm_term || ''],
     ['Data', formatDate(lead.created_at)],
-  ];
+  ].filter(([, v]) => v && v !== 'Não') as [string, string][];
 
   return (
-    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-      <div className="bg-[#111111] rounded-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden border border-[#2a2a2a]">
-        <div className="flex items-center justify-between p-4 border-b border-[#2a2a2a]">
-          <h2 className="text-white font-semibold">{lead.nome}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white text-2xl leading-none">×</button>
+    <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+      <div className="bg-[#141618] rounded-2xl w-full max-w-md max-h-[85vh] flex flex-col overflow-hidden border border-[#2a2a2a] shadow-2xl">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#2a2a2a]">
+          <div>
+            <h2 className="text-white font-semibold">{lead.nome || 'Lead'}</h2>
+            <StatusBadge status={lead.status_lead || 'novo'} />
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-[#2a2a2a] text-gray-400 hover:text-white hover:bg-[#3a3a3a] transition-colors text-xl leading-none"
+          >
+            ×
+          </button>
         </div>
-        <div className="flex-1 overflow-y-auto p-4 space-y-2">
-          {fields.map(([label, value]) => value ? (
-            <div key={label} className="flex gap-2">
-              <span className="text-gray-400 text-xs min-w-32">{label}:</span>
-              <span className="text-white text-xs">{String(value)}</span>
+        <div className="flex-1 overflow-y-auto p-5 space-y-3">
+          {rows.map(([label, value]) => (
+            <div key={label} className="flex flex-col gap-0.5">
+              <span className="text-[#666] text-[11px] uppercase tracking-wide font-medium">{label}</span>
+              <span className="text-[#e0e0e0] text-sm">{value}</span>
             </div>
-          ) : null)}
-          <div className="pt-3 border-t border-[#2a2a2a]">
-            <label className="text-gray-400 text-xs block mb-1">Alterar status:</label>
+          ))}
+          <div className="pt-3 border-t border-[#2a2a2a] mt-3">
+            <label className="text-[#666] text-[11px] uppercase tracking-wide font-medium block mb-2">Alterar status</label>
             <select
-              value={lead.status_lead}
+              value={lead.status_lead || 'novo'}
               onChange={(e) => onStatusChange(lead.id!, e.target.value)}
-              className="bg-[#2a2a2a] text-white rounded-lg px-3 py-2 text-sm w-full outline-none"
+              className="bg-[#1e1e1e] text-white rounded-xl px-3 py-2.5 text-sm w-full outline-none border border-[#2a2a2a] focus:border-[#25D366] transition-colors"
             >
               {STATUS_OPTIONS.map((s) => (
-                <option key={s} value={s}>{s}</option>
+                <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>
               ))}
             </select>
           </div>
@@ -110,7 +127,7 @@ export default function AdminPage() {
   const [dateTo, setDateTo] = useState('');
 
   useEffect(() => {
-    if (localStorage.getItem('adminAuth') === 'true') {
+    if (typeof window !== 'undefined' && localStorage.getItem('adminAuth') === 'true') {
       setAuthenticated(true);
     }
   }, []);
@@ -129,6 +146,7 @@ export default function AdminPage() {
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
+    setAuthError('');
     const res = await fetch('/api/admin/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -162,7 +180,7 @@ export default function AdminPage() {
   });
 
   const exportCSV = () => {
-    const headers = ['Nome','WhatsApp','Instagram','Email','Perfil','Momento','Faturamento','Necessidade','Objetivo','Investimento','Status','Clicou','Agendou','UTM Source','UTM Medium','UTM Campaign','Data'];
+    const headers = ['Nome', 'WhatsApp', 'Instagram', 'Email', 'Perfil', 'Momento', 'Faturamento', 'Necessidade', 'Objetivo', 'Investimento', 'Status', 'Clicou', 'Agendou', 'UTM Source', 'UTM Medium', 'UTM Campaign', 'Data'];
     const rows = filteredLeads.map((l) => [
       l.nome, l.whatsapp, l.instagram, l.email, l.perfil, l.momento_operacao,
       l.faturamento_atual, l.principal_necessidade, l.objetivo_faturamento,
@@ -176,100 +194,204 @@ export default function AdminPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'leads.csv';
+    a.download = `leads-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
+    URL.revokeObjectURL(url);
   };
 
   if (!authenticated) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
-        <form onSubmit={handleAuth} className="bg-[#111111] rounded-2xl p-8 w-full max-w-sm border border-[#2a2a2a]">
-          <h1 className="text-white text-xl font-bold mb-6 text-center">Admin — Revolução AI</h1>
-          <input
-            type="password"
-            placeholder="Senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-[#1e1e1e] text-white placeholder-gray-500 rounded-xl px-4 py-3 text-sm outline-none focus:ring-1 focus:ring-[#25D366] mb-3"
-          />
-          {authError && <p className="text-red-400 text-xs mb-3">{authError}</p>}
-          <button type="submit" className="w-full bg-[#25D366] text-white font-semibold rounded-xl px-4 py-3 text-sm hover:bg-[#1fad52] transition-colors">
-            Entrar
-          </button>
-        </form>
+      <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center p-4">
+        <div className="w-full max-w-sm">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 rounded-full overflow-hidden mx-auto mb-3 border-2 border-[#25D366]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/avatar.jpg" alt="" className="w-full h-full object-cover object-top" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+            </div>
+            <h1 className="text-white text-lg font-bold">Revolução AI</h1>
+            <p className="text-[#666] text-sm mt-1">Dashboard administrativo</p>
+          </div>
+          <form onSubmit={handleAuth} className="bg-[#141618] rounded-2xl p-6 border border-[#2a2a2a] shadow-2xl">
+            <label className="text-[#888] text-xs uppercase tracking-wide font-medium block mb-2">Senha de acesso</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoFocus
+              className="w-full bg-[#0d0d0d] text-white placeholder-[#444] rounded-xl px-4 py-3 text-sm outline-none focus:ring-1 focus:ring-[#25D366] border border-[#2a2a2a] mb-3 transition-all"
+            />
+            {authError && (
+              <p className="text-red-400 text-xs mb-3 flex items-center gap-1">
+                <span>⚠</span> {authError}
+              </p>
+            )}
+            <button
+              type="submit"
+              className="w-full bg-[#25D366] text-white font-semibold rounded-xl px-4 py-3 text-sm hover:bg-[#20bf5a] hover:shadow-lg hover:shadow-[#25D36633] transition-all active:scale-[0.98]"
+            >
+              Entrar
+            </button>
+          </form>
+        </div>
       </div>
     );
   }
 
+  const totalLeads = filteredLeads.length;
+  const qualificados = filteredLeads.filter((l) => l.status_lead === 'qualificado').length;
+  const agendados = filteredLeads.filter((l) => l.agendou_reuniao).length;
+
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <div className="sticky top-0 bg-[#111111] border-b border-[#2a2a2a] px-6 py-4 z-10">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-bold">Dashboard — Leads</h1>
-          <div className="flex gap-2">
-            <button onClick={fetchLeads} className="bg-[#1e1e1e] text-gray-300 rounded-lg px-3 py-1.5 text-sm hover:bg-[#2a2a2a]">
-              Atualizar
-            </button>
-            <button onClick={exportCSV} className="bg-[#25D366] text-white rounded-lg px-3 py-1.5 text-sm hover:bg-[#1fad52]">
-              Exportar CSV
-            </button>
+    <div className="min-h-screen bg-[#0d0d0d] text-white">
+      {/* Header */}
+      <div className="sticky top-0 bg-[#141618] border-b border-[#2a2a2a] z-10 shadow-lg">
+        <div className="px-6 py-4">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-white font-bold text-lg">Dashboard de Leads</h1>
+              <p className="text-[#666] text-xs mt-0.5">Revolução AI — @lucasmag.ai</p>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={fetchLeads}
+                className="bg-[#1e1e1e] text-[#aaa] hover:text-white rounded-xl px-3 py-2 text-xs font-medium hover:bg-[#2a2a2a] transition-colors border border-[#2a2a2a]"
+              >
+                ↻ Atualizar
+              </button>
+              <button
+                onClick={exportCSV}
+                className="bg-[#25D366] text-white rounded-xl px-3 py-2 text-xs font-semibold hover:bg-[#20bf5a] transition-colors"
+              >
+                ↓ CSV
+              </button>
+              <button
+                onClick={() => { localStorage.removeItem('adminAuth'); setAuthenticated(false); }}
+                className="bg-[#1e1e1e] text-[#aaa] hover:text-white rounded-xl px-3 py-2 text-xs font-medium hover:bg-[#2a2a2a] transition-colors border border-[#2a2a2a]"
+              >
+                Sair
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <input
-            type="text"
-            placeholder="Buscar nome, telefone, email..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="bg-[#1e1e1e] text-white placeholder-gray-500 rounded-lg px-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-[#25D366] flex-1 min-w-48"
-          />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-[#1e1e1e] text-white rounded-lg px-3 py-1.5 text-sm outline-none"
-          >
-            <option value="">Todos os status</option>
-            {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
-          <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)}
-            className="bg-[#1e1e1e] text-white rounded-lg px-3 py-1.5 text-sm outline-none" />
-          <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)}
-            className="bg-[#1e1e1e] text-white rounded-lg px-3 py-1.5 text-sm outline-none" />
+
+          {/* Stats */}
+          <div className="flex gap-3 mb-4">
+            <div className="bg-[#1e1e1e] rounded-xl px-4 py-2 border border-[#2a2a2a]">
+              <p className="text-[#666] text-[10px] uppercase tracking-wide">Total</p>
+              <p className="text-white font-bold text-lg">{totalLeads}</p>
+            </div>
+            <div className="bg-[#1e1e1e] rounded-xl px-4 py-2 border border-[#2a2a2a]">
+              <p className="text-[#666] text-[10px] uppercase tracking-wide">Qualificados</p>
+              <p className="text-[#10b981] font-bold text-lg">{qualificados}</p>
+            </div>
+            <div className="bg-[#1e1e1e] rounded-xl px-4 py-2 border border-[#2a2a2a]">
+              <p className="text-[#666] text-[10px] uppercase tracking-wide">Agendados</p>
+              <p className="text-[#25D366] font-bold text-lg">{agendados}</p>
+            </div>
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-wrap gap-2">
+            <input
+              type="text"
+              placeholder="🔍 Buscar nome, WhatsApp, e-mail..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="bg-[#1e1e1e] text-white placeholder-[#555] rounded-xl px-4 py-2 text-sm outline-none focus:ring-1 focus:ring-[#25D366] flex-1 min-w-48 border border-[#2a2a2a] transition-all"
+            />
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="bg-[#1e1e1e] text-[#ccc] rounded-xl px-3 py-2 text-sm outline-none border border-[#2a2a2a] focus:ring-1 focus:ring-[#25D366]"
+            >
+              <option value="">Todos os status</option>
+              {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>)}
+            </select>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="bg-[#1e1e1e] text-[#ccc] rounded-xl px-3 py-2 text-sm outline-none border border-[#2a2a2a]"
+            />
+            <input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="bg-[#1e1e1e] text-[#ccc] rounded-xl px-3 py-2 text-sm outline-none border border-[#2a2a2a]"
+            />
+          </div>
         </div>
       </div>
 
+      {/* Kanban */}
       <div className="p-6 overflow-x-auto">
         {loading ? (
-          <p className="text-gray-400 text-center py-12">Carregando...</p>
+          <div className="flex items-center justify-center py-24 gap-3 text-[#666]">
+            <div className="w-5 h-5 border-2 border-[#25D366] border-t-transparent rounded-full animate-spin" />
+            <span className="text-sm">Carregando leads...</span>
+          </div>
         ) : (
-          <div className="flex gap-4 min-w-max">
+          <div className="flex gap-4 min-w-max pb-4">
             {KANBAN_COLUMNS.map((col) => {
               const colLeads = getColumnLeads(filteredLeads, col.id);
               return (
                 <div key={col.id} className="w-72 flex-shrink-0">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: col.color }} />
-                    <h2 className="text-sm font-semibold text-gray-300">{col.label}</h2>
-                    <span className="ml-auto bg-[#1e1e1e] text-gray-400 text-xs rounded-full px-2 py-0.5">{colLeads.length}</span>
+                  {/* Column header */}
+                  <div
+                    className="flex items-center gap-2 mb-3 px-3 py-2.5 rounded-xl border"
+                    style={{ backgroundColor: col.bg, borderColor: col.color + '33' }}
+                  >
+                    <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: col.color }} />
+                    <h2 className="text-sm font-semibold flex-1" style={{ color: col.color }}>{col.label}</h2>
+                    <span
+                      className="text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center"
+                      style={{ backgroundColor: col.color + '22', color: col.color }}
+                    >
+                      {colLeads.length}
+                    </span>
                   </div>
+
+                  {/* Cards */}
                   <div className="space-y-2">
                     {colLeads.map((lead) => (
                       <button
                         key={lead.id}
                         onClick={() => setSelectedLead(lead)}
-                        className="w-full bg-[#111111] border border-[#2a2a2a] rounded-xl p-3 text-left hover:border-[#3a3a3a] transition-colors"
+                        className="w-full bg-[#141618] border border-[#2a2a2a] rounded-xl p-3.5 text-left hover:border-[#3a3a3a] hover:bg-[#1a1c1f] transition-all group shadow-sm"
                       >
-                        <p className="text-white text-sm font-medium">{lead.nome || 'Sem nome'}</p>
-                        {lead.whatsapp && <p className="text-gray-400 text-xs mt-1">{lead.whatsapp}</p>}
-                        {lead.email && <p className="text-gray-400 text-xs">{lead.email}</p>}
-                        {lead.investimento && (
-                          <p className="text-xs mt-1.5" style={{ color: col.color }}>{lead.investimento}</p>
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <p className="text-white text-sm font-semibold leading-tight group-hover:text-[#25D366] transition-colors">
+                            {lead.nome || 'Sem nome'}
+                          </p>
+                          {lead.agendou_reuniao && (
+                            <span className="text-[#25D366] text-xs flex-shrink-0">✓</span>
+                          )}
+                        </div>
+                        {lead.whatsapp && (
+                          <p className="text-[#888] text-xs mb-0.5 flex items-center gap-1">
+                            <span className="text-[#555]">📱</span> {lead.whatsapp}
+                          </p>
                         )}
-                        <p className="text-gray-600 text-xs mt-1.5">{formatDate(lead.created_at)}</p>
+                        {lead.email && (
+                          <p className="text-[#888] text-xs mb-0.5 truncate flex items-center gap-1">
+                            <span className="text-[#555]">✉</span> {lead.email}
+                          </p>
+                        )}
+                        {lead.investimento && (
+                          <p
+                            className="text-xs mt-2 font-medium"
+                            style={{ color: col.color }}
+                          >
+                            {lead.investimento}
+                          </p>
+                        )}
+                        <p className="text-[#444] text-[10px] mt-2">{formatDate(lead.created_at)}</p>
                       </button>
                     ))}
                     {colLeads.length === 0 && (
-                      <p className="text-gray-600 text-xs text-center py-4">Vazio</p>
+                      <div className="text-[#333] text-xs text-center py-8 border border-dashed border-[#222] rounded-xl">
+                        Nenhum lead
+                      </div>
                     )}
                   </div>
                 </div>
