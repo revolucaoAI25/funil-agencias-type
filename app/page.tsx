@@ -140,7 +140,7 @@ export default function Home() {
       const branches: Record<string, string[]> = {
         'Já sei implementar IA, mas preciso vender mais': [
           `Boa, **${nome}**.`,
-          'Nesse caso, o principal ponto é **transformar sua capacidade técnica em uma oferta vendável** — com aquisição, posicionamento, qualificação, proposta e fechamento high ticket.',
+          'Nesse caso, o principal ponto é **transformar sua capacidade técnica em uma oferta vendável** — com aquisição, posicionamento, qualificação, reunião comercial, proposta e fechamento high ticket.',
           'No Revolução AI, eu estruturei esse processo dentro da própria agência para **vender agentes de IA para empresas** com previsibilidade e percepção de valor alta.',
         ],
         'Já sei vender, mas preciso aprender a entregar IA': [
