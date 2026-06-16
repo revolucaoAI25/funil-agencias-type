@@ -326,7 +326,7 @@ export default function Home() {
       await showBotMessages([
         `Entendi, **${nome}**.`,
         'Neste momento, o melhor próximo passo para você é uma **opção mais acessível e adequada para o seu momento**.',
-        'Vou te indicar o **Curso do Zero aos 10k com Agentes de IA** — um treinamento direto para você dar os primeiros passos e entender como funciona esse mercado.',
+        'Vou te indicar o **Curso do Zero aos 10k com Agentes de IA** — onde você aprende a **desenvolver e vender seus primeiros agentes** com uma metodologia validada, do zero ao cliente pagante.',
       ]);
       setInputMode('curso_btn');
       isRunning.current = false;
@@ -348,12 +348,10 @@ export default function Home() {
 
     setInputMode(null);
     addUserMessage(`WhatsApp: ${contacts.whatsapp}`);
-    await updateLead({ whatsapp: contacts.whatsapp, instagram: contacts.instagram, email: contacts.email });
+    await updateLead({ whatsapp: contacts.whatsapp, instagram: contacts.instagram, email: contacts.email, clicou_agendamento: true });
 
     await showBotMessages([
-      `Tudo certo, **${nome}**.`,
-      'Agora escolha o **melhor horário** para sua reunião comigo.',
-      'Nessa conversa, eu vou entender seu momento atual e montar um plano para você avançar rumo à sua meta com uma **agência de IA**.',
+      `Tudo certo, **${nome}**. Escolha o melhor horário para sua reunião comigo na janela que acabou de abrir.`,
     ]);
     setInputMode('calendly_btn');
     isRunning.current = false;
@@ -390,6 +388,12 @@ export default function Home() {
 
   const handleContactsSubmit = useCallback((data: { whatsapp: string; instagram: string; email: string }) => {
     setInputMode(null);
+    // Open Calendly popup immediately on form submit
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({ url: CALENDLY_URL });
+    } else {
+      window.open(CALENDLY_URL, '_blank');
+    }
     const w = window as Window & { __funnelResolveContacts?: (v: typeof data) => void };
     if (w.__funnelResolveContacts) {
       const resolve = w.__funnelResolveContacts;
@@ -401,6 +405,9 @@ export default function Home() {
   useEffect(() => {
     const handleCalendlyEvent = (e: MessageEvent) => {
       if (e.data && e.data.event === 'calendly.event_scheduled') {
+        if (QUALIFIED_INVESTMENTS.includes(leadData.current.investimento)) {
+          trackLead();
+        }
         updateLead({ agendou_reuniao: true });
         setInputMode(null);
         showBotMessages([
@@ -414,17 +421,13 @@ export default function Home() {
     return () => window.removeEventListener('message', handleCalendlyEvent);
   }, [updateLead, showBotMessages]);
 
-  const handleCalendlyClick = useCallback(async () => {
-    await updateLead({ clicou_agendamento: true });
-    if (QUALIFIED_INVESTMENTS.includes(leadData.current.investimento)) {
-      trackLead();
-    }
+  const handleCalendlyClick = useCallback(() => {
     if (window.Calendly) {
       window.Calendly.initPopupWidget({ url: CALENDLY_URL });
     } else {
       window.open(CALENDLY_URL, '_blank');
     }
-  }, [updateLead]);
+  }, []);
 
   const cursoUrl = process.env.NEXT_PUBLIC_CURSO_197_URL;
 
