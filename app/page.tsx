@@ -6,7 +6,7 @@ import ChatBubble from '@/components/ChatBubble';
 import TypingIndicator from '@/components/TypingIndicator';
 import ChoiceButtons from '@/components/ChoiceButtons';
 import ContactForm from '@/components/ContactForm';
-import { trackLead, getCookieValue } from '@/lib/pixel';
+import { trackLead, trackCustom, getCookieValue } from '@/lib/pixel';
 
 
 const CALENDLY_URL = 'https://calendly.com/revolucao-ai/diagnostico-agencia-de-ia';
@@ -380,6 +380,7 @@ export default function Home() {
   const handleContactsSubmit = useCallback((data: { whatsapp: string; instagram: string; email: string }) => {
     setInputMode(null);
     // Open Calendly modal immediately on form submit
+    trackCustom('AbrirAgenda');
     setShowCalendlyModal(true);
     const w = window as Window & { __funnelResolveContacts?: (v: typeof data) => void };
     if (w.__funnelResolveContacts) {
@@ -391,7 +392,14 @@ export default function Home() {
 
   useEffect(() => {
     const handleCalendlyEvent = (e: MessageEvent) => {
-      if (e.data && e.data.event === 'calendly.event_scheduled') {
+      // Calendly may send data as object or JSON string
+      let data = e.data;
+      if (typeof data === 'string') {
+        try { data = JSON.parse(data); } catch { return; }
+      }
+      if (!data || !data.event) return;
+
+      if (data.event === 'calendly.event_scheduled') {
         if (QUALIFIED_INVESTMENTS.includes(leadData.current.investimento)) {
           trackLead();
         }
@@ -404,12 +412,17 @@ export default function Home() {
           'Eu vou analisar seu cenário e te mostrar um plano para construir ou escalar sua agência de IA com base na metodologia que o Revolução AI usa em projetos reais.',
         ]);
       }
+
+      if (data.event === 'calendly.date_and_time_selected') {
+        trackCustom('CalendlyHorarioSelecionado');
+      }
     };
     window.addEventListener('message', handleCalendlyEvent);
     return () => window.removeEventListener('message', handleCalendlyEvent);
   }, [updateLead, showBotMessages]);
 
   const handleCalendlyClick = useCallback(() => {
+    trackCustom('AbrirAgenda');
     setShowCalendlyModal(true);
   }, []);
 

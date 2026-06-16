@@ -10,6 +10,12 @@ export function trackLead() {
   }
 }
 
+export function trackCustom(event: string) {
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('trackCustom', event);
+  }
+}
+
 export function getCookieValue(name: string): string {
   if (typeof document === 'undefined') return '';
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
