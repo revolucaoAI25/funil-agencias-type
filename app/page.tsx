@@ -6,8 +6,17 @@ import ChatBubble from '@/components/ChatBubble';
 import TypingIndicator from '@/components/TypingIndicator';
 import ChoiceButtons from '@/components/ChoiceButtons';
 import ContactForm from '@/components/ContactForm';
-import CalendlyModal from '@/components/CalendlyModal';
 import { trackLead, getCookieValue } from '@/lib/pixel';
+
+declare global {
+  interface Window {
+    Calendly?: {
+      initPopupWidget: (opts: { url: string }) => void;
+    };
+  }
+}
+
+const CALENDLY_URL = 'https://calendly.com/revolucao-ai/diagnostico-agencia-de-ia';
 
 interface Message {
   id: string;
@@ -25,7 +34,6 @@ export default function Home() {
   const [inputMode, setInputMode] = useState<InputMode>(null);
   const [choiceOptions, setChoiceOptions] = useState<string[]>([]);
   const [inputDisabled] = useState(false);
-  const [showCalendly, setShowCalendly] = useState(false);
   const [textInput, setTextInput] = useState('');
   const [textFocused, setTextFocused] = useState(false);
 
@@ -317,8 +325,8 @@ export default function Home() {
     if (status === 'curso_197') {
       await showBotMessages([
         `Entendi, **${nome}**.`,
-        'Neste momento, o melhor próximo passo para você é começar por um **treinamento mais simples e direto**.',
-        'Vou te enviar uma opção de entrada para você começar a entender como funciona o **mercado de agentes de IA** e dar os primeiros passos.',
+        'Neste momento, o melhor próximo passo para você é uma **opção mais acessível e adequada para o seu momento**.',
+        'Vou te indicar o **Curso do Zero aos 10k com Agentes de IA** — um treinamento direto para você dar os primeiros passos e entender como funciona esse mercado.',
       ]);
       setInputMode('curso_btn');
       isRunning.current = false;
@@ -390,24 +398,33 @@ export default function Home() {
     }
   }, []);
 
+  useEffect(() => {
+    const handleCalendlyEvent = (e: MessageEvent) => {
+      if (e.data && e.data.event === 'calendly.event_scheduled') {
+        updateLead({ agendou_reuniao: true });
+        setInputMode(null);
+        showBotMessages([
+          'Reunião agendada. ✓',
+          'No horário escolhido, esteja em um local tranquilo para conversar comigo.',
+          'Eu vou analisar seu cenário e te mostrar um plano para construir ou escalar sua agência de IA com base na metodologia que o Revolução AI usa em projetos reais.',
+        ]);
+      }
+    };
+    window.addEventListener('message', handleCalendlyEvent);
+    return () => window.removeEventListener('message', handleCalendlyEvent);
+  }, [updateLead, showBotMessages]);
+
   const handleCalendlyClick = useCallback(async () => {
     await updateLead({ clicou_agendamento: true });
     if (QUALIFIED_INVESTMENTS.includes(leadData.current.investimento)) {
       trackLead();
     }
-    setShowCalendly(true);
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({ url: CALENDLY_URL });
+    } else {
+      window.open(CALENDLY_URL, '_blank');
+    }
   }, [updateLead]);
-
-  const afterCalendly = useCallback(async (scheduled: boolean) => {
-    if (scheduled) await updateLead({ agendou_reuniao: true });
-    setShowCalendly(false);
-    setInputMode(null);
-    await showBotMessages([
-      'Reunião agendada. ✓',
-      'No horário escolhido, esteja em um local tranquilo para conversar comigo.',
-      'Eu vou analisar seu cenário e te mostrar um plano para construir ou escalar sua agência de IA com base na metodologia que o Revolução AI usa em projetos reais.',
-    ]);
-  }, [updateLead, showBotMessages]);
 
   const cursoUrl = process.env.NEXT_PUBLIC_CURSO_197_URL;
 
@@ -461,7 +478,7 @@ export default function Home() {
               }}
               style={greenBtnStyle}
             >
-              Conhecer o treinamento de entrada
+              Conhecer o Curso do Zero aos 10k com Agentes de IA
             </button>
           </div>
         )}
@@ -523,12 +540,6 @@ export default function Home() {
         </div>
       )}
 
-      {showCalendly && (
-        <CalendlyModal
-          onClose={() => afterCalendly(false)}
-          onScheduled={() => afterCalendly(true)}
-        />
-      )}
     </div>
   );
 }
