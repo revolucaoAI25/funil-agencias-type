@@ -1,6 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase';
 
+const ALLOWED_FIELDS = [
+  'nome', 'perfil', 'momento_operacao', 'faturamento_atual',
+  'principal_necessidade', 'objetivo_faturamento', 'investimento',
+  'status_lead', 'whatsapp', 'instagram', 'email',
+  'clicou_agendamento', 'agendou_reuniao',
+  'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+  'meta_fbp', 'meta_fbc',
+] as const;
+
+function pickAllowed(body: Record<string, unknown>) {
+  return Object.fromEntries(
+    ALLOWED_FIELDS.filter((k) => k in body).map((k) => [k, body[k]])
+  );
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -12,7 +27,7 @@ export async function POST(req: NextRequest) {
 
     const { data, error } = await supabase
       .from('leads')
-      .insert([body])
+      .insert([pickAllowed(body)])
       .select('id')
       .single();
 

@@ -1,7 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase';
 
-export async function GET() {
+function isAuthorized(req: NextRequest): boolean {
+  const token = req.headers.get('x-admin-token');
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  return !!adminPassword && token === adminPassword;
+}
+
+export async function GET(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const supabase = createServiceClient();
 

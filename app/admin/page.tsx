@@ -134,7 +134,10 @@ export default function AdminPage() {
 
   const fetchLeads = useCallback(async () => {
     setLoading(true);
-    const res = await fetch('/api/admin/leads');
+    const token = sessionStorage.getItem('adminToken') || '';
+    const res = await fetch('/api/admin/leads', {
+      headers: { 'x-admin-token': token },
+    });
     const data = await res.json();
     setLeads(Array.isArray(data) ? data : []);
     setLoading(false);
@@ -154,6 +157,7 @@ export default function AdminPage() {
     });
     if (res.ok) {
       localStorage.setItem('adminAuth', 'true');
+      sessionStorage.setItem('adminToken', password);
       setAuthenticated(true);
     } else {
       setAuthError('Senha incorreta');
@@ -161,9 +165,10 @@ export default function AdminPage() {
   };
 
   const handleStatusChange = async (id: string, status: string) => {
+    const token = sessionStorage.getItem('adminToken') || '';
     await fetch(`/api/admin/leads/${id}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
       body: JSON.stringify({ status_lead: status }),
     });
     setLeads((prev) => prev.map((l) => l.id === id ? { ...l, status_lead: status } : l));

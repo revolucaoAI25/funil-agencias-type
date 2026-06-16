@@ -1,6 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase';
 
+const ALLOWED_FIELDS = [
+  'perfil', 'momento_operacao', 'faturamento_atual',
+  'principal_necessidade', 'objetivo_faturamento', 'investimento',
+  'status_lead', 'whatsapp', 'instagram', 'email',
+  'clicou_agendamento', 'agendou_reuniao',
+] as const;
+
+function pickAllowed(body: Record<string, unknown>) {
+  return Object.fromEntries(
+    ALLOWED_FIELDS.filter((k) => k in body).map((k) => [k, body[k]])
+  );
+}
+
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -14,7 +27,12 @@ export async function PATCH(
       return NextResponse.json({ success: true });
     }
 
-    const { error } = await supabase.from('leads').update(body).eq('id', id);
+    const updates = pickAllowed(body);
+    if (Object.keys(updates).length === 0) {
+      return NextResponse.json({ success: true });
+    }
+
+    const { error } = await supabase.from('leads').update(updates).eq('id', id);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
