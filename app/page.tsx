@@ -180,8 +180,7 @@ export default function Home() {
 
     await showBotMessages([
       '**Quer faturar R$50 mil por mês com sua agência de IA em até 6 meses?**',
-      'Responda algumas perguntas rápidas e veja se faz sentido agendar uma reunião comigo, **Lucas Magalhães**, fundador do Revolução AI.',
-      'Na call, eu vou analisar seu cenário e te mostrar um plano para você **vender e entregar agentes de IA high ticket** para empresas usando a metodologia de uma das primeiras agências de IA do Brasil.',
+      'Eu vou analisar seu cenário e te mostrar um plano para você **vender e entregar agentes de IA high ticket** para empresas usando a metodologia de uma das primeiras agências de IA do Brasil.',
       'Antes de começar, qual é seu nome?',
     ], true);
     setInputMode('text');
@@ -196,10 +195,9 @@ export default function Home() {
 
     await showBotMessages([
       `Perfeito, **${nome}**.`,
-      'Como te disse, eu sou um dos fundadores do **Revolução AI**, uma das primeiras agências de IA do Brasil.',
+      'Talvez você já me conheça, mas eu sou o **Lucas Magalhães**, um dos fundadores do **Revolução AI**, uma das primeiras agências de IA do Brasil.',
       'Desde 2023, a nossa agência estruturou projetos de IA aplicada a negócios em nichos como advocacia, saúde, estética, software, franquias, varejo e infoprodutos.',
-      'Agora vamos entender seu momento para ver se faz sentido você conversar direto comigo.',
-      'Qual opção mais combina com você hoje?',
+      'Para que eu possa te ajudar melhor, me conta um pouco do seu momento. Qual opção mais combina com você hoje?',
     ]);
     setChoiceOptions([
       'Já sei implementar IA, mas preciso vender mais',
@@ -272,8 +270,7 @@ export default function Home() {
     await updateLead({ principal_necessidade: necessidade });
 
     await showBotMessages([
-      'Esse é exatamente o tipo de ponto que eu analiso na reunião.',
-      'Na call, eu vou entender seu cenário e te mostrar o caminho mais direto para avançar nisso.',
+      'Bacana, isso nos ajuda a ter um direcionamento melhor de onde precisamos focar.',
       'Agora vamos entender sua meta.',
     ]);
 
@@ -293,7 +290,7 @@ export default function Home() {
     await updateLead({ objetivo_faturamento: objetivo });
 
     await showBotMessages([
-      'Para acelerar esse plano, quanto você estaria disposto a investir em uma mentoria com acompanhamento direto, método comercial, método de entrega, scripts, templates e direcionamento?',
+      'Se uma solução te fizesse atingir **sua meta** dentro dos próximos 6 meses, quanto você estaria disposto a investir nela?',
     ]);
     setChoiceOptions([
       'Até R$3 mil',
@@ -329,8 +326,8 @@ export default function Home() {
 
     await showBotMessages([
       `Perfeito, **${nome}**.`,
-      'Pelo que você respondeu, faz sentido você avançar para uma **reunião comigo**.',
-      'Na call, eu vou analisar seu cenário e montar um plano com base nos **5 pilares da metodologia do Revolução AI**:\n\n• **Oferta** — o que vender e como posicionar\n• **Aquisição** — como gerar oportunidades\n• **Vendas** — como fechar contratos high ticket\n• **Entrega** — como construir e entregar os agentes\n• **Operação** — como escalar com padrão',
+      'Pelo que você respondeu, faz sentido você avançar para uma **reunião de diagnóstico e estratégia** comigo. Nessa reunião vou entender seu cenário e te mostrar o caminho mais direto para atingir sua meta.',
+      'Vou montar um plano personalizado com base nos **5 pilares da metodologia do Revolução AI**:\n\n• **Oferta** — o que vender e como posicionar\n• **Aquisição** — como gerar oportunidades\n• **Vendas** — como fechar contratos high ticket\n• **Entrega** — como construir e entregar os agentes\n• **Operação** — como escalar com padrão',
       'A ideia é você sair da reunião com **clareza sobre o caminho mais direto** para vender e entregar agentes de IA high ticket para empresas.',
       'Antes de liberar a agenda, deixe seu contato para nossa equipe confirmar sua aplicação.',
     ]);
