@@ -20,9 +20,6 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
-        {/* Calendly */}
-        <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
-
         {/* Meta Pixel */}
         {pixelId && (
           <>
@@ -52,13 +49,7 @@ export default function RootLayout({
           </>
         )}
       </head>
-      <body className={inter.className}>
-        {children}
-        <Script
-          src="https://assets.calendly.com/assets/external/widget.js"
-          strategy="lazyOnload"
-        />
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
