@@ -140,13 +140,13 @@ export default function Home() {
       const branches: Record<string, string[]> = {
         'Já sei implementar IA, mas preciso vender mais': [
           `Boa, **${nome}**.`,
-          'Nesse caso, o principal ponto é **transformar sua capacidade técnica em uma oferta vendável** — com aquisição, posicionamento, qualificação, reunião comercial, proposta e fechamento high ticket.',
+          'Nesse caso, o principal ponto é **transformar sua capacidade técnica em uma oferta vendável** — com aquisição, posicionamento, qualificação, proposta e fechamento high ticket.',
           'No Revolução AI, eu estruturei esse processo dentro da própria agência para **vender agentes de IA para empresas** com previsibilidade e percepção de valor alta.',
         ],
         'Já sei vender, mas preciso aprender a entregar IA': [
           `Boa, **${nome}**.`,
           'Nesse caso, o principal ponto é **ter uma entrega validada** para colocar no mercado com segurança.',
-          'O Revolução AI desenvolveu uma metodologia para construir agentes de IA com padrão, velocidade e qualidade — e já aplicou isso em projetos reais nos mais variados segmentos.\n\nNa reunião, eu vou entender seu cenário e mostrar como essa entrega pode virar uma **oferta high ticket** para empresas.',
+          'O Revolução AI desenvolveu uma metodologia para construir agentes de IA com padrão, velocidade e qualidade — e já aplicou isso em projetos reais nos mais variados segmentos.',
         ],
         'Quero aprender venda e entrega do zero': [
           `Perfeito, **${nome}**.`,
@@ -155,13 +155,13 @@ export default function Home() {
         ],
         'Já tenho operação de IA e quero escalar': [
           `Boa, **${nome}**.`,
-          'Nesse caso, a reunião precisa olhar para os **gargalos de escala**.',
-          'Pode ser:\n\n• **Aquisição** — geração de oportunidades\n• **Conversão** — taxa de fechamento\n• **Ticket** — valor por cliente\n• **Entrega** — padrão e velocidade\n• **Operação** — padronização e replicabilidade\n\nNa reunião, eu vou identificar onde está o seu gargalo principal e o que fazer para destravar o crescimento.',
+          'Nesse caso, o foco precisa estar nos **gargalos de escala**.',
+          'Pode ser:\n\n• **Aquisição** — geração de oportunidades\n• **Conversão** — taxa de fechamento\n• **Ticket** — valor por cliente\n• **Entrega** — padrão e velocidade\n• **Operação** — padronização e replicabilidade',
         ],
         'Tenho agência de marketing/tráfego e quero entrar em IA': [
           `Boa, **${nome}**.`,
           'Esse é **um dos caminhos mais fortes**.',
-          'Quem já entende de tráfego, geração de leads e venda de serviços pode usar agentes de IA como uma **nova oferta high ticket** para empresas — aproveitando o que você já sabe fazer.\n\nNa reunião, eu vou te mostrar como essa solução entra na sua operação com uma metodologia validada de **venda e entrega**.',
+          'Quem já entende de tráfego, geração de leads e venda de serviços pode usar agentes de IA como uma **nova oferta high ticket** para empresas — aproveitando o que você já sabe fazer.\n\nO Revolução AI tem uma metodologia validada de **venda e entrega** para isso.',
         ],
       };
       await showBotMessages(branches[perfil] || [`Boa, **${nome}**.`]);
