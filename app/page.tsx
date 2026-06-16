@@ -8,6 +8,12 @@ import ChoiceButtons from '@/components/ChoiceButtons';
 import ContactForm from '@/components/ContactForm';
 import { trackLead, trackCustom, getCookieValue } from '@/lib/pixel';
 
+declare global {
+  interface Window {
+    Calendly?: { initPopupWidget: (opts: { url: string }) => void };
+  }
+}
+
 
 const CALENDLY_URL = 'https://calendly.com/revolucao-ai/diagnostico-agencia-de-ia';
 
@@ -27,7 +33,6 @@ export default function Home() {
   const [inputMode, setInputMode] = useState<InputMode>(null);
   const [choiceOptions, setChoiceOptions] = useState<string[]>([]);
   const [inputDisabled] = useState(false);
-  const [showCalendlyModal, setShowCalendlyModal] = useState(false);
   const [textInput, setTextInput] = useState('');
   const [textFocused, setTextFocused] = useState(false);
 
@@ -379,9 +384,10 @@ export default function Home() {
 
   const handleContactsSubmit = useCallback((data: { whatsapp: string; instagram: string; email: string }) => {
     setInputMode(null);
-    // Open Calendly modal immediately on form submit
+    // Open Calendly immediately on form submit
     trackCustom('AbrirAgenda');
-    setShowCalendlyModal(true);
+    if (window.Calendly) window.Calendly.initPopupWidget({ url: CALENDLY_URL });
+    else window.open(CALENDLY_URL, '_blank');
     const w = window as Window & { __funnelResolveContacts?: (v: typeof data) => void };
     if (w.__funnelResolveContacts) {
       const resolve = w.__funnelResolveContacts;
@@ -404,7 +410,6 @@ export default function Home() {
           trackLead();
         }
         updateLead({ agendou_reuniao: true });
-        setShowCalendlyModal(false);
         setInputMode(null);
         showBotMessages([
           'Reunião agendada. ✓',
@@ -423,7 +428,8 @@ export default function Home() {
 
   const handleCalendlyClick = useCallback(() => {
     trackCustom('AbrirAgenda');
-    setShowCalendlyModal(true);
+    if (window.Calendly) window.Calendly.initPopupWidget({ url: CALENDLY_URL });
+    else window.open(CALENDLY_URL, '_blank');
   }, []);
 
   const cursoUrl = process.env.NEXT_PUBLIC_CURSO_197_URL;
@@ -446,7 +452,7 @@ export default function Home() {
       <ChatHeader />
 
       {/* Messages */}
-      <div style={{ flex: 1, overflowY: 'auto', width: '100%', padding: '16px 20px' }}>
+      <div className="chat-scroll" style={{ flex: 1, overflowY: 'auto', width: '100%', padding: '16px 20px' }}>
         {messages.map((msg) => (
           <ChatBubble key={msg.id} message={msg.text} isUser={msg.isUser} />
         ))}
@@ -485,54 +491,6 @@ export default function Home() {
 
         <div ref={messagesEndRef} />
       </div>
-
-      {/* Calendly modal */}
-      {showCalendlyModal && (
-        <div
-          onClick={(e) => { if (e.target === e.currentTarget) setShowCalendlyModal(false); }}
-          style={{
-            position: 'fixed', inset: 0,
-            backgroundColor: 'rgba(0,0,0,0.75)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '16px',
-          }}
-        >
-          <div style={{
-            position: 'relative',
-            width: '100%',
-            maxWidth: '820px',
-            height: '90vh',
-            maxHeight: '700px',
-            backgroundColor: '#fff',
-            borderRadius: '16px',
-            overflow: 'hidden',
-          }}>
-            <button
-              onClick={() => setShowCalendlyModal(false)}
-              style={{
-                position: 'absolute', top: 10, right: 12,
-                background: 'none', border: 'none',
-                fontSize: '22px', cursor: 'pointer',
-                color: '#555', zIndex: 1, lineHeight: 1,
-              }}
-              aria-label="Fechar"
-            >
-              ✕
-            </button>
-            <iframe
-              src={CALENDLY_URL}
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              title="Agendar reunião"
-              style={{ display: 'block', border: 'none' }}
-            />
-          </div>
-        </div>
-      )}
 
       {/* Text input bar */}
       {inputMode === 'text' && (
