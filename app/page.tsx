@@ -61,10 +61,14 @@ export default function Home() {
   });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const isRunning = useRef(false);
 
   const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const container = messagesContainerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
   }, []);
 
   useEffect(() => {
@@ -448,11 +452,11 @@ export default function Home() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', backgroundColor: '#0d0d0d' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', backgroundColor: '#0d0d0d' }}>
       <ChatHeader />
 
       {/* Messages */}
-      <div className="chat-scroll" style={{ flex: 1, overflowY: 'auto', width: '100%', padding: '16px 20px' }}>
+      <div ref={messagesContainerRef} className="chat-scroll" style={{ flex: 1, overflowY: 'auto', width: '100%', padding: '16px 20px' }}>
         {messages.map((msg) => (
           <ChatBubble key={msg.id} message={msg.text} isUser={msg.isUser} />
         ))}
@@ -509,9 +513,11 @@ export default function Home() {
           >
             <input
               type="text"
+              inputMode="text"
+              autoComplete="given-name"
               value={textInput}
               onChange={(e) => setTextInput(e.target.value)}
-              onFocus={() => setTextFocused(true)}
+              onFocus={() => { setTextFocused(true); setTimeout(scrollToBottom, 300); }}
               onBlur={() => setTextFocused(false)}
               placeholder="Seu nome..."
               autoFocus
@@ -519,7 +525,7 @@ export default function Home() {
                 flex: 1,
                 backgroundColor: 'transparent',
                 color: '#ffffff',
-                fontSize: '14px',
+                fontSize: '16px',
                 outline: 'none',
                 border: 'none',
               }}

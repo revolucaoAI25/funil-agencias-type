@@ -9,9 +9,7 @@ export default function ChatHeader() {
       display: 'flex',
       alignItems: 'center',
       gap: '12px',
-      position: 'sticky',
-      top: 0,
-      zIndex: 10,
+      flexShrink: 0,
       boxShadow: '0 2px 12px rgba(0,0,0,0.4)',
     }}>
       <div style={{ position: 'relative', flexShrink: 0 }}>
