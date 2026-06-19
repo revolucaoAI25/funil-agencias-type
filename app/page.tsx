@@ -188,7 +188,7 @@ export default function Home() {
     isRunning.current = true;
 
     await showBotMessages([
-      '**Quer estar faturando de R$50 mil a R$100 mil por mês com sua agência de IA em até 6 meses?**',
+      '**Quer estar faturando de R$50 mil a R$100 mil por mês com sua agência de IA dentro dos próximos 6 meses?**',
       'Eu vou analisar seu cenário e te mostrar um plano para você **vender e entregar agentes de IA high ticket** para empresas usando a metodologia de uma das primeiras agências de IA do Brasil.',
       'Antes de começar, qual é seu nome?',
     ], true);
