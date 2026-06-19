@@ -260,6 +260,7 @@ export default function Home() {
       'Entendido.',
       'O Revolução AI já trabalhou com empresas, franquias, softwares, escritórios, clínicas, restaurantes, infoprodutores e influenciadores com grandes audiências.',
       'Alguns clientes que já passaram pelo Revolução AI:\n\n• **Bubble Box** — franqueadora com mais de 250 unidades no Brasil\n• **Casoca** — plataforma para arquitetos e designers com mais de 300 mil profissionais cadastrados\n• **Patrícia Davidson** — nutricionista influencer com mais de 3 milhões de seguidores\n• **Dra. Ryuza Gonçalves** — influencer de suplementação com mais de 700 mil seguidores\n• **Tami Gerhardt** — influenciadora de emagrecimento com mais de 450 mil seguidores\n• **Willian Celso / Autêntica** — referência em posicionamento de marca, com mais de 400 mil seguidores\n• **Marcondes Madureira Advogados** — escritório de Direito de Família com forte presença digital e mais de 380 mil seguidores\n• **Guilherme Vazan** — infoprodutor de impressão 3D com mais de 5 mil alunos\n• **Guedes & Cruz Advogados** — escritório de advocacia bancária com alto volume de leads\n• **Kanpai BH** — restaurante japonês premium em Belo Horizonte',
+      'Contratos que fechamos usando essa metodologia foram de **R$10 mil, R$12 mil, R$15 mil, R$20 mil e R$25 mil** — todos com empresas reais, sem precisar ser o mais barato.',
       'Agora precisamos entender o **principal ponto** que está impedindo você de avançar mais rápido.',
     ], false, 1000);
 
@@ -339,7 +340,6 @@ export default function Home() {
       'Pelo que você respondeu, faz sentido você avançar para uma **reunião de diagnóstico e estratégia** comigo. Nessa reunião vou entender seu cenário e te mostrar o caminho mais direto para atingir sua meta.',
       'Vou montar um plano personalizado com base nos **5 pilares da metodologia do Revolução AI**:\n\n• **Oferta** — o que vender e como posicionar\n• **Aquisição** — como gerar oportunidades\n• **Vendas** — como fechar contratos high ticket\n• **Entrega** — como construir e entregar os agentes\n• **Operação** — como escalar com padrão',
       'A ideia é você sair da reunião com **clareza sobre o caminho mais direto** para vender e entregar agentes de IA high ticket para empresas.',
-      'Contratos que fechamos usando essa metodologia foram de **R$10 mil, R$12 mil, R$15 mil, R$20 mil e R$25 mil** — todos com empresas reais, sem precisar ser o mais barato.',
       'Antes de liberar a agenda, deixe seu contato para nossa equipe confirmar sua aplicação.',
     ]);
     setInputMode('contacts');
