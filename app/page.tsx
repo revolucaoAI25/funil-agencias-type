@@ -205,6 +205,7 @@ export default function Home() {
     await showBotMessages([
       `Perfeito, **${nome}**.`,
       'Talvez você já me conheça, mas eu sou o **Lucas Magalhães**, um dos fundadores do **Revolução AI**, uma das primeiras agências de IA do Brasil.',
+      'Na agência, atingimos um faturamento de R$100 mil por mês — com uma equipe enxuta — e foi dentro dela que eu validei todo o método que hoje ensino.',
       'Desde 2023, a nossa agência estruturou projetos de IA aplicada a negócios em nichos como advocacia, saúde, estética, software, franquias, varejo e infoprodutos.',
       'Para que eu possa te ajudar melhor, me conta um pouco do seu momento. Qual opção mais combina com você hoje?',
     ]);
@@ -338,6 +339,7 @@ export default function Home() {
       'Pelo que você respondeu, faz sentido você avançar para uma **reunião de diagnóstico e estratégia** comigo. Nessa reunião vou entender seu cenário e te mostrar o caminho mais direto para atingir sua meta.',
       'Vou montar um plano personalizado com base nos **5 pilares da metodologia do Revolução AI**:\n\n• **Oferta** — o que vender e como posicionar\n• **Aquisição** — como gerar oportunidades\n• **Vendas** — como fechar contratos high ticket\n• **Entrega** — como construir e entregar os agentes\n• **Operação** — como escalar com padrão',
       'A ideia é você sair da reunião com **clareza sobre o caminho mais direto** para vender e entregar agentes de IA high ticket para empresas.',
+      'Contratos que fechamos usando essa metodologia foram de **R$10 mil, R$12 mil, R$15 mil, R$20 mil e R$25 mil** — todos com empresas reais, sem precisar ser o mais barato.',
       'Antes de liberar a agenda, deixe seu contato para nossa equipe confirmar sua aplicação.',
     ]);
     setInputMode('contacts');
